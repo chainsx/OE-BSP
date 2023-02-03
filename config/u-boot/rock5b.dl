@@ -1,0 +1,3 @@
+UBOOT_IDB_DL_ADDR="https://dl.radxa.com/rock5/sw/images/loader/rock-5b/release/rock-5b-idbloader-g49da44e116d.img"
+UBOOT_ITB_DL_ADDR="https://dl.radxa.com/rock5/sw/images/loader/rock-5b/release/rock-5b-u-boot-g49da44e116d.itb"
+
