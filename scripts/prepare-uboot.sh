@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source $work_dir/scripts/common.sh
+source ./scripts/common.sh
 
 BOARD=$1
 
