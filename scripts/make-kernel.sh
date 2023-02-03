@@ -1,22 +1,22 @@
 #!/bin/bash
 
-source $workdir/scripts/common.sh
+source $work_dir/scripts/common.sh
 
 BOARD=$1
 
 clone_kernel_source() {
-cd $build
+cd $build_dir
 if [ -d $build_dir/kernel ];then rm -rf $build_dir/kernel; fi
 git clone $KERNEL_GIT_SOURCE -b $KERNEL_GIT_SOURCE_BRANCH kernel
 rm -rf $build_dir/kernel/.config
 }
 
 check_and_apply_kernel_config() {
-if [[ -f $workdir/config/kernel/$KERNEL_CONFIG.conf ]];then
-  cp $workdir/config/kernel/$KERNEL_CONFIG.conf $build_dir/kernel/arch/arm64/configs/rpmbuild_defconfigs
-  cd $build/kernel
+if [[ -f $work_dir/config/kernel/$KERNEL_CONFIG.conf ]];then
+  cp $work_dir/config/kernel/$KERNEL_CONFIG.conf $build_dir/kernel/arch/arm64/configs/rpmbuild_defconfigs
+  cd $build_dir/kernel
   tar -zcvf $build/$KERNEL_GIT_SOURCE_BRANCH.tar.gz .
-  cd $build && rm -rf kernel
+  cd $build_dir && rm -rf kernel
   echo "kernel configure file check and apply done."
 else
   echo "kernel configure file check and apply failed, please fix."
@@ -27,13 +27,13 @@ fi
 build_kernel() {
 mkdir ~/rpmbuild/SPECS
 mkdir ~/rpmbuild/SOURCES
-mv $build/$KERNEL_GIT_SOURCE_BRANCH.tar.gz ~/rpmbuild/SOURCES
-cp $workdir/config/package/kernel.spec.temp ~/rpmbuild/SPECS/kernel.spec
+mv $build_dir/$KERNEL_GIT_SOURCE_BRANCH.tar.gz ~/rpmbuild/SOURCES
+cp $work_dir/config/package/kernel.spec.temp ~/rpmbuild/SPECS/kernel.spec
 sed -i "s|BUILDVERSION|${KERNEL_GIT_SOURCE_BRANCH}|g" ~/rpmbuild/SPECS/kernel.spec
 sed -i "s|PLATFORM|${PLATFORM}|g" ~/rpmbuild/SPECS/kernel.spec
 cd ~/rpmbuild/SPECS && rpmbuild -ba kernel.spec
 mv ~/rpmbuild/RPMS/aarch64/*rpm $build/rpms
-cd $build && rm -rf ~/rpmbuild
+cd $build_dir && rm -rf ~/rpmbuild
 
 }
 
