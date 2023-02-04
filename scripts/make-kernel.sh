@@ -38,8 +38,8 @@ fi
 }
 
 build_kernel() {
-mkdir ~/rpmbuild/SPECS
-mkdir ~/rpmbuild/SOURCES
+mkdir -p ~/rpmbuild/SPECS
+mkdir -p ~/rpmbuild/SOURCES
 mv $build_dir/${KERNEL_GIT_SOURCE_BRANCH}.tar.gz ~/rpmbuild/SOURCES
 cp $work_dir/config/package/kernel.spec.temp ~/rpmbuild/SPECS/kernel.spec
 sed -i "s|BUILDVERSION|${KERNEL_GIT_SOURCE_BRANCH}|g" ~/rpmbuild/SPECS/kernel.spec
