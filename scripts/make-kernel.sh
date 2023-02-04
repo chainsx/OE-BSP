@@ -40,7 +40,7 @@ fi
 build_kernel() {
 mkdir -p ~/rpmbuild/SPECS
 mkdir -p ~/rpmbuild/SOURCES
-mv $build_dir/${KERNEL_GIT_SOURCE_BRANCH}.tar.gz ~/rpmbuild/SOURCES
+mv $build_dir/${KERNEL_VERSION}.tar.gz ~/rpmbuild/SOURCES
 cp $work_dir/config/package/kernel.spec.temp ~/rpmbuild/SPECS/kernel.spec
 sed -i "s|BUILDVERSION|${KERNEL_VERSION}|g" ~/rpmbuild/SPECS/kernel.spec
 sed -i "s|PLATFORM|${PLATFORM}|g" ~/rpmbuild/SPECS/kernel.spec
