@@ -190,9 +190,9 @@ build_rootfs() {
     
     LOG "Configure network done."
 
-    mount --bind /dev ${rootfs_dir}/dev
-    mount -t proc /proc ${rootfs_dir}/proc
-    mount -t sysfs /sys ${rootfs_dir}/sys
+    #mount --bind /dev ${rootfs_dir}/dev
+    #mount -t proc /proc ${rootfs_dir}/proc
+    #mount -t sysfs /sys ${rootfs_dir}/sys
 
     cp $work_dir/target/scripts/expand-rootfs.sh ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
     chmod +x ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
@@ -206,8 +206,8 @@ build_rootfs() {
     chkconfig expand-rootfs.sh on
 EOF
 
-    sed -i 's/#NTP=/NTP=0.cn.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
-    sed -i 's/#FallbackNTP=/FallbackNTP=1.asia.pool.ntp.org 2.asia.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
+    #sed -i 's/#NTP=/NTP=0.cn.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
+    #sed -i 's/#FallbackNTP=/FallbackNTP=1.asia.pool.ntp.org 2.asia.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
 
     echo "LABEL=rootfs  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
     echo "LABEL=boot  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
@@ -215,6 +215,10 @@ EOF
 
     if [ -d ${rootfs_dir}/boot/grub2 ]; then
         rm -rf ${rootfs_dir}/boot/grub2
+    fi
+
+    if [ -d ${rootfs_dir}/boot/efi ]; then
+        rm -rf ${rootfs_dir}/boot/efi
     fi
 
     UMOUNT_ALL

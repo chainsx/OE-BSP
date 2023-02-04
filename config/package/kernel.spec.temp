@@ -51,7 +51,6 @@ install -m 755 $TargetImage $RPM_BUILD_ROOT/boot/vmlinuz-%{KernelVer}
 install -m 644 .config $RPM_BUILD_ROOT/boot/config-%{KernelVer}
 install -m 644 System.map $RPM_BUILD_ROOT/boot/System.map-%{KernelVer}
 
-mkdir -p $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}/overlays
 install -m 644 $(find arch/%{Arch}/boot/dts/PLATFORM/ -name "*.dtb") $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}/
 
 %postun
@@ -79,12 +78,10 @@ else
 fi
 if [ "$version_old" != "0" ]; then
     if [ -f /boot/vmlinuz-$version_old ] && [ -d /boot/dtb-$version_old ] && ( [ "$version_old" == "old" ] || [ -d /lib/modules/$version_old ] ); then
-        ls /boot/dtb-$version_old/overlays/*.dtbo > /dev/null 2>&1
         if [ "$?" == "0" ]; then
             ls /boot/dtb-$version_old/*.dtb > /dev/null 2>&1
             if [ "$?" == "0" ]; then
-                rm -rf /boot/*.dtb /boot/overlays /boot/Image
-                mkdir /boot/overlays
+                rm -rf /boot/*.dtb /boot/Image
                 install -m 755 /boot/vmlinuz-$version_old /boot/Image
                 for file in `ls /boot/dtb-$version_old/*.dtb 2>/dev/null`
                 do
@@ -92,16 +89,9 @@ if [ "$version_old" != "0" ]; then
                         install -m 644 $file /boot/`basename $file`
                     fi
                 done
-                install -m 644 $(find /boot/dtb-$version_old/overlays/ -name "*.dtbo") /boot/overlays/
-                if ls /boot/dtb-$version_old/overlays/*.dtb > /dev/null 2>&1; then
-                    install -m 644 $(find /boot/dtb-$version_old/overlays/ -name "*.dtb") /boot/overlays/
-                fi
-                install -m 644 /boot/dtb-$version_old/overlays/README /boot/overlays/
             else
                 echo "warning: files in /boot/dtb-$version_old/*.dtb missing when resetting kernel as $version_old, something may go wrong when starting this device next time."
             fi
-        else
-            echo "warning: files in /boot/dtb-$version_old/overlays missing when resetting kernel as $version_old, something may go wrong when starting this device next time."
         fi
     else
         echo "warning: files missing when resetting kernel as $version_old, something may go wrong when starting this device next time."
@@ -113,25 +103,11 @@ if [ "$1" == "1" ]; then
     if [ ! -f /boot/vmlinuz-old ] && [ -f /boot/Image ]; then
         mkdir /boot/dtb-old
         mv /boot/*.dtb /boot/dtb-old
-        mv /boot/overlays /boot/dtb-old/
         mv /boot/Image /boot/vmlinuz-old
     fi
 fi
-rm -rf /boot/*.dtb /boot/overlays /boot/Image
-mkdir -p /boot/overlays
+rm -rf /boot/*.dtb /boot/Image
 install -m 755 /boot/vmlinuz-%{KernelVer} /boot/Image
-for file in `ls /boot/dtb-%{KernelVer}/*.dtb 2>/dev/null`
-do
-    if [ -f $file ]; then
-        install -m 644 $file /boot/`basename $file`
-    fi
-done
-install -m 644 $(find /boot/dtb-%{KernelVer}/overlays/ -name "*.dtbo") /boot/overlays/
-if ls /boot/dtb-%{KernelVer}/overlays/*.dtb > /dev/null 2>&1; then
-    install -m 644 $(find /boot/dtb-%{KernelVer}/overlays/ -name "*.dtb") /boot/overlays/
-fi
-install -m 644 /boot/dtb-%{KernelVer}/overlays/README /boot/overlays/
-
 
 %files
 %defattr (-, root, root)

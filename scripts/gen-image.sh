@@ -16,12 +16,12 @@ help()
     exit $1
 }
 
-source $build_dir/scripts/common.sh
+source ./scripts/common.sh
 
 default_param() {
     build_dir=$(pwd)/build
     outputdir=${build_dir}/$(date +'%Y-%m-%d')
-    name=openEuler-Firefly-RK3399-aarch64-alpha1
+    name=openEuler-Rockchip-aarch64-alpha1
     boot_dir=$rootfs_dir/boot
     uboot_dir=${build_dir}/u-boot
     boot_mnt=${build_dir}/boot_tmp
@@ -64,9 +64,7 @@ make_img(){
     img_file=${build_dir}/${name}.img
     dd if=/dev/zero of=${img_file} bs=1MiB count=$size status=progress && sync
 
-    cat << EOF | parted ${img_file} mklabel gpt mkpart primary fat32 32768s 262143s
-    Ignore
-EOF
+    parted ${img_file} mklabel gpt mkpart primary fat32 32768s 262143s
     parted ${img_file} -s set 1 boot on
     parted ${img_file} mkpart primary ext4 262144s 100%
 
@@ -90,7 +88,6 @@ EOF
     write_uboot
 
     cp -rfp ${boot_dir}/* ${boot_mnt}
-    mv ${boot_mnt}/extlinux/extlinux.conf ${boot_mnt}/extlinux/extlinux.conf
 
     rsync -avHAXq ${rootfs_dir}/* ${root_mnt}
     sync
