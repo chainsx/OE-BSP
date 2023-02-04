@@ -4,6 +4,16 @@ source ./scripts/common.sh
 
 BOARD=$1
 
+check_and_apply_board_config() {
+if [[ -f $work_dir/config/boards/$BOARD.conf ]];then
+  source $work_dir/config/boards/$BOARD.conf
+  echo "boards configure file check done."
+else
+  echo "boards configure file check failed, please fix."
+  exit 2
+fi
+}
+
 clone_kernel_source() {
 cd $build_dir
 if [ -d $build_dir/kernel ];then rm -rf $build_dir/kernel; fi
@@ -36,7 +46,6 @@ mv ~/rpmbuild/RPMS/aarch64/*rpm $build/rpms
 cd $build_dir && rm -rf ~/rpmbuild
 
 }
-
 check_and_apply_board_config
 clone_kernel_source
 check_and_apply_kernel_config

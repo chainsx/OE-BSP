@@ -15,16 +15,6 @@ LOG(){
     echo `date` - INFO, $* | tee -a ${log_dir}/${builddate}.log
 }
 
-check_and_apply_board_config() {
-if [[ -f $workdir/config/boards/$BOARD.conf ]];then
-  source $workdir/config/boards/$BOARD.conf
-  echo "boards configure file check done."
-else
-  echo "boards configure file check failed, please fix."
-  exit 2
-fi
-}
-
 LOSETUP_D_IMG(){
     set +e
     if [ -d ${root_mnt} ]; then

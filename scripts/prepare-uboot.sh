@@ -8,7 +8,7 @@ check_and_prepare_uboot() {
 if [[ -f $work_dir/config/u-boot/$BOARD.dl ]];then
   source $work_dir/config/u-boot/$BOARD.dl
   if [ -d $build_dir/u-boot ];then rm -rf $build_dir/u-boot; fi
-  mkdir $build_dir/u-boot
+  mkdir -p $build_dir/u-boot
   wget $UBOOT_IDB_DL_ADDR -O $build_dir/u-boot/idbloader.img
   wget $UBOOT_ITB_DL_ADDR -O $build_dir/u-boot/u-boot.itb
   
