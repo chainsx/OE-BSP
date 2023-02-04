@@ -81,7 +81,7 @@ build_rootfs() {
     if [ "x$spec_param" == "xheadless" ] || [ "x$spec_param" == "x" ]; then
         :
     elif [ "x$spec_param" == "xxfce" ] || [ "x$spec_param" == "xukui" ] || [ "x$spec_param" == "xdde" ]; then
-        CONFIG_RPM_LIST=$build_dir/config/package/rpmlist/rpmlist-${spec_param}
+        CONFIG_RPM_LIST=$work_dir/config/package/rpmlist/rpmlist-${spec_param}
     elif [ -f ${spec_param} ]; then
         cp ${spec_param} ${tmp_dir}/
         spec_file_name=${spec_param##*/}
@@ -225,6 +225,6 @@ root_need
 default_param
 parseargs "$@" || help $?
 
-CONFIG_RPM_LIST=$build_dir/config/package/rpmlist/rpmlist
+CONFIG_RPM_LIST=$work_dir/config/package/rpmlist/rpmlist
 
 build_rootfs
