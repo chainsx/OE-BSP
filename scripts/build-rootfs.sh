@@ -13,6 +13,9 @@ Options:
 "
 
 source ./scripts/common.sh
+if [ ! -d ${log_dir} ];then mkdir ${log_dir}; fi
+if [ ! -f ${log_dir}/${builddate}.log ];then touch ${log_dir}/${builddate}.log; fi
+
 
 help()
 {
