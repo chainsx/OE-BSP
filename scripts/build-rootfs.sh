@@ -225,6 +225,6 @@ root_need
 default_param
 parseargs "$@" || help $?
 
-CONFIG_RPM_LIST=$build_dir/configs/package/rpmlist/rpmlist
+CONFIG_RPM_LIST=$build_dir/config/package/rpmlist/rpmlist
 
 build_rootfs
