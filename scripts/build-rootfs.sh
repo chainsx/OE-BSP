@@ -81,7 +81,7 @@ build_rootfs() {
     if [ "x$spec_param" == "xheadless" ] || [ "x$spec_param" == "x" ]; then
         :
     elif [ "x$spec_param" == "xxfce" ] || [ "x$spec_param" == "xukui" ] || [ "x$spec_param" == "xdde" ]; then
-        CONFIG_RPM_LIST=$build_dir/configs/package/rpmlist/rpmlist-${spec_param}
+        CONFIG_RPM_LIST=$build_dir/config/package/rpmlist/rpmlist-${spec_param}
     elif [ -f ${spec_param} ]; then
         cp ${spec_param} ${tmp_dir}/
         spec_file_name=${spec_param##*/}
@@ -170,7 +170,7 @@ build_rootfs() {
     
     echo "   nameserver 8.8.8.8
    nameserver 114.114.114.114"  > "${rootfs_dir}/etc/resolv.conf"
-    if [ ! -d ${rootfs_dir}/etc/sysconfig/network-scripts ]; then mkdir "${rootfs_dir}/etc/sysconfig/network-scripts"; fi
+    if [ ! -d ${rootfs_dir}/etc/sysconfig/network-scripts ]; then mkdir -p "${rootfs_dir}/etc/sysconfig/network-scripts"; fi
     echo "   TYPE=Ethernet
    PROXY_METHOD=none
    BROWSER_ONLY=no
