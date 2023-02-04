@@ -17,8 +17,9 @@ fi
 clone_kernel_source() {
 cd $build_dir
 if [ -d $build_dir/kernel ];then rm -rf $build_dir/kernel; fi
-git clone $KERNEL_GIT_SOURCE -b $KERNEL_GIT_SOURCE_BRANCH kernel
+git clone $KERNEL_GIT_SOURCE -b $KERNEL_GIT_SOURCE_BRANCH kernel --depth=1
 rm -rf $build_dir/kernel/.config
+rm -rf $build_dir/kernel/.git
 }
 
 check_and_apply_kernel_config() {
