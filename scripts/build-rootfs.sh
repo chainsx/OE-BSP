@@ -12,7 +12,7 @@ Options:
   -h, --help                    Show command help.
 "
 
-source $build_dir/scripts/common.sh
+source ./scripts/common.sh
 
 help()
 {
@@ -21,7 +21,7 @@ help()
 }
 
 default_param() {
-    repo_file="https://gitee.com/src-openeuler/openEuler-repos/raw/openEuler-20.03-LTS/generic.repo"
+    repo_file="https://gitee.com/src-openeuler/openEuler-repos/raw/openEuler-22.03-LTS-SP1/generic.repo"
 }
 
 parseargs()
