@@ -26,7 +26,7 @@ check_and_apply_kernel_config() {
 echo "KERNEL_CONFIG=$KERNEL_CONFIG"
 echo "KERNEL_GIT_SOURCE_BRANCH=$KERNEL_GIT_SOURCE_BRANCH"
 if [[ -f $work_dir/config/kernel/${KERNEL_CONFIG}.conf ]];then
-  cp $work_dir/config/kernel/${KERNEL_CONFIG}.conf $build_dir/kernel/arch/arm64/configs/rpmbuild_defconfigs
+  cp $work_dir/config/kernel/${KERNEL_CONFIG}.config $build_dir/kernel/arch/arm64/configs/rpmbuild_defconfigs
   cd $build_dir/kernel
   tar -zcvf $build/$KERNEL_GIT_SOURCE_BRANCH.tar.gz .
   cd $build_dir && rm -rf kernel
