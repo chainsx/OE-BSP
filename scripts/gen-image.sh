@@ -75,14 +75,14 @@ make_img(){
     device=""
     LOSETUP_D_IMG
     size=`du -sh --block-size=1MiB ${build_dir}/rootfs | cut -f 1 | xargs`
-    size=$(($size+1000))
+    size=$(($size+720))
     losetup -D
     img_file=${build_dir}/${name}.img
     dd if=/dev/zero of=${img_file} bs=1MiB count=$size status=progress && sync
 
-    parted ${img_file} mklabel gpt mkpart primary fat32 32768s 262143s
+    parted ${img_file} mklabel gpt mkpart primary fat32 32768s 524287s
     parted ${img_file} -s set 1 boot on
-    parted ${img_file} mkpart primary ext4 262144s 100%
+    parted ${img_file} mkpart primary ext4 524288s 100%
 
     device=`losetup -f --show -P ${img_file}`
     trap 'LOSETUP_D_IMG' EXIT
