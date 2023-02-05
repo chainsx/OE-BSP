@@ -85,7 +85,7 @@ fi
 
 deppkg_install
 default_param
-parseargs
+parseargs "$@" || help $?
 
 LOG "REPO=$repo_file"
 LOG "SPEC=$spec_param"
