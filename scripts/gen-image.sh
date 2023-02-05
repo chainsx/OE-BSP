@@ -6,7 +6,6 @@ Generate rockchip bootable image.
 The target compressed bootable images will be generated in the build/YYYY-MM-DD folder of the directory where the gen_image.sh script is located.
 
 Options: 
-  -n, --name IMAGE_NAME         The Rockchip image name to be built.
   -b, --board BOARD_NAME        The target board name to be built.
   -h, --help                    Show command help.
 "
@@ -19,15 +18,6 @@ help()
 
 source ./scripts/common.sh
 
-default_param() {
-    outputdir=${build_dir}/$(date +'%Y-%m-%d')
-    name=openEuler-Rockchip-aarch64-alpha1
-    boot_dir=$rootfs_dir/boot
-    uboot_dir=${build_dir}/u-boot
-    boot_mnt=${build_dir}/boot_tmp
-    root_mnt=${build_dir}/root_tmp
-}
-
 parseargs()
 {
     if [ "x$#" == "x0" ]; then
@@ -39,10 +29,6 @@ parseargs()
         if [ "x$1" == "x-h" -o "x$1" == "x--help" ]; then
             return 1
         elif [ "x$1" == "x" ]; then
-            shift
-        elif [ "x$1" == "x-n" -o "x$1" == "x--name" ]; then
-            name=`echo $2`
-            shift
             shift
         elif [ "x$1" == "x-b" -o "x$1" == "x--board" ]; then
             BOARD=`echo $2`
@@ -67,10 +53,22 @@ fi
 
 write_uboot() {
     if [[ -f $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ]];then
+        LOG "PLATFORM=${PLATFORM}"
         bash $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh $uboot_dir /dev/${loopX}
         echo "write uboot done."
     else
         echo "apply-u-boot script file check failed, please fix."
+    exit 2
+    fi
+}
+
+apply_boot-method() {
+    if [[ -f ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh ]];then
+        LOG "BOOT_METHOD=${BOOT_METHOD}"
+        bash ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh /dev/mapper/${loopX}p2 ${boot_mnt}
+        echo "apply boot-method done."
+    else
+        echo "apply boot-method script file check failed, please fix."
     exit 2
     fi
 }
@@ -116,20 +114,7 @@ make_img(){
     sync
     LOG "copy openEuler-root done."
 
-    line=$(blkid | grep /dev/mapper/${loopX}p2)
-    uuid=${line#*UUID=\"}
-    uuid=${uuid%%\"*}
-
-    LOG "root-UUID=${uuid}"
-
-    mkdir -p ${boot_mnt}/extlinux
-
-    LOG "CMDLINE=${CMDLINE}"
-    echo "label openEuler
-    kernel /Image
-    initrd /initrd.img
-    fdt /dtb/${BOOT_DTB_FILE}
-    append  root=UUID=${uuid} ${CMDLINE}" > ${boot_mnt}/extlinux/extlinux.conf
+    apply_boot-method
 
     umount $rootp
     umount $bootp
@@ -142,6 +127,8 @@ make_img(){
 
 outputd(){
     cd $build_dir
+
+    name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
 
     if [ -f $outputdir ];then
         img_name_check=$(ls $outputdir | grep $name)
@@ -169,7 +156,11 @@ outputd(){
 }
 
 set -e
-default_param
+
+outputdir=${build_dir}/$(date +'%Y-%m-%d')
+boot_mnt=${build_dir}/boot_tmp
+root_mnt=${build_dir}/root_tmp
+
 parseargs "$@" || help $?
 if [ ! -d ${log_dir} ];then mkdir -p ${log_dir}; fi
 

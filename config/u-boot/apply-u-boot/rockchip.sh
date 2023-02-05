@@ -18,10 +18,8 @@ fi
 }
 
 write_u-boot() {
-
 dd if=$uboot_dir/idbloader.img of=$target seek=$UBOOT_IDB_WRITE_SEEK
 dd if=$uboot_dir/u-boot.itb of=$target seek=$UBOOT_ITB_WRITE_SEEK
-
 }
 
 check_u-uboot

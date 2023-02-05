@@ -1,17 +1,44 @@
 #!/bin/bash
 
+__usage="
+Usage: make-kernel [OPTIONS]
+Make rockchip kernel package.
+The target kernel package will be generated in the build/rpms folder.
+
+Options: 
+  -b, --board BOARD_NAME        The target board name to be built.
+  -h, --help                    Show command help.
+"
+
+help()
+{
+    echo "$__usage"
+    exit $1
+}
+
 source ./scripts/common.sh
 
-BOARD=$1
+parseargs()
+{
+    if [ "x$#" == "x0" ]; then
+        return 0
+    fi
 
-check_and_apply_board_config() {
-if [[ -f $work_dir/config/boards/$BOARD.conf ]];then
-  source $work_dir/config/boards/$BOARD.conf
-  echo "boards configure file check done."
-else
-  echo "boards configure file check failed, please fix."
-  exit 2
-fi
+    while [ "x$#" != "x0" ];
+    do
+        if [ "x$1" == "x-h" -o "x$1" == "x--help" ]; then
+            return 1
+        elif [ "x$1" == "x" ]; then
+            shift
+        elif [ "x$1" == "x-b" -o "x$1" == "x--board" ]; then
+            BOARD=`echo $2`
+            shift
+            shift
+        else
+            echo `date` - ERROR, UNKNOWN params "$@"
+            return 2
+        fi
+    done
 }
 
 clone_kernel_source() {
@@ -50,6 +77,8 @@ mv ~/rpmbuild/RPMS/aarch64/*rpm $build_dir/rpms
 cd $build_dir && rm -rf ~/rpmbuild
 
 }
+
+parseargs "$@" || help $?
 check_and_apply_board_config
 clone_kernel_source
 check_and_apply_kernel_config

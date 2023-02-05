@@ -3,6 +3,8 @@ build_dir=$work_dir/build
 log_dir=$workdir/log
 tmp_dir=${build_dir}/tmp
 rootfs_dir=${build_dir}/rootfs
+boot_dir=$rootfs_dir/boot
+uboot_dir=${build_dir}/u-boot
 
 buildid=$(date +%Y%m%d%H%M%S)
 builddate=${buildid:0:8}
@@ -60,4 +62,14 @@ root_need() {
         echo "Error:This script must be run as root!" 1>&2
         exit 1
     fi
+}
+
+check_and_apply_board_config() {
+if [[ -f $work_dir/config/boards/$BOARD.conf ]];then
+  source $work_dir/config/boards/$BOARD.conf
+  echo "boards configure file check done."
+else
+  echo "boards configure file check failed, please fix."
+  exit 2
+fi
 }
