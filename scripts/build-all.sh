@@ -72,6 +72,13 @@ deppkg_install() {
 }
 
 deppkg_install
+default_param
+parseargs
+
+LOG "REPO=$repo_file"
+LOG "SPEC=$spec_param"
+LOG "name=$name"
+LOG "BOARD=$BOARD"
 
 bash $work_dir/scripts/prepare-uboot.sh $BOARD
 bash $work_dir/scripts/make-kernel.sh $BOARD
