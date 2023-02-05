@@ -19,7 +19,6 @@ help()
 source ./scripts/common.sh
 
 default_param() {
-    build_dir=$(pwd)/build
     outputdir=${build_dir}/$(date +'%Y-%m-%d')
     name=openEuler-Rockchip-aarch64-alpha1
     boot_dir=$rootfs_dir/boot
@@ -52,6 +51,13 @@ parseargs()
 }
 
 write_uboot() {
+    if [[ -f $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ]];then
+        bash $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ${loopX}
+        echo "write uboot done."
+    else
+        echo "apply-u-boot script file check failed, please fix."
+    exit 2
+    fi
 }
 
 make_img(){
@@ -85,9 +91,9 @@ make_img(){
     mount -t vfat -o uid=root,gid=root,umask=0000 ${bootp} ${boot_mnt}
     mount -t ext4 ${rootp} ${root_mnt}
 
-    write_uboot
-
     cp -rfp ${boot_dir}/* ${boot_mnt}
+    sync
+    rm -rf ${boot_dir}/*
 
     rsync -avHAXq ${rootfs_dir}/* ${root_mnt}
     sync
@@ -98,6 +104,8 @@ make_img(){
     umount $bootp
     umount ${rootfs_dir}
     umount ${boot_dir}
+
+    write_uboot
 
     LOSETUP_D_IMG
     losetup -D
