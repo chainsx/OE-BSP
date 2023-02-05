@@ -60,16 +60,6 @@ write_uboot() {
     fi
 }
 
-set_cmdline(){
-    vmlinuz_name=$(ls $boot_dir | grep vmlinuz)
-    echo $CMDLINE
-    echo "label openEuler
-    kernel /${vmlinuz_name}
-    initrd /initrd.img
-    fdt /dtb/${BOOT_DTB_FILE}
-    append  root=UUID=${uuid} ${CMDLINE}" > $1
-}
-
 make_img(){
     cd $build_dir
     device=""
@@ -120,7 +110,14 @@ make_img(){
     echo "root UUID ${uuid}"
 
     mkdir -p ${boot_mnt}/extlinux
-    set_cmdline ${boot_mnt}/extlinux/extlinux.conf
+
+    echo ${CMDLINE}
+    echo ${BOOT_DTB_FILE}
+    echo "label openEuler
+    kernel /Image
+    initrd /initrd.img
+    fdt /dtb/${BOOT_DTB_FILE}
+    append  root=UUID=${uuid} ${CMDLINE}" > ${boot_mnt}/extlinux/extlinux.conf
 
     umount $rootp
     umount $bootp
