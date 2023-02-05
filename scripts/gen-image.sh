@@ -107,7 +107,7 @@ make_img(){
     mount -t ext4 ${rootp} ${root_mnt}
 
     cp -rfp ${boot_dir}/* ${boot_mnt}
-    cp -rfp ${boot_mnt}/dtb* ${boot_mnt}/dtb
+
     sync
 
     rsync -avHAXq ${rootfs_dir}/* ${root_mnt}
