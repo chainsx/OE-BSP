@@ -75,7 +75,7 @@ make_img(){
     device=""
     LOSETUP_D_IMG
     size=`du -sh --block-size=1MiB ${build_dir}/rootfs | cut -f 1 | xargs`
-    size=$(($size+550))
+    size=$(($size+1000))
     losetup -D
     img_file=${build_dir}/${name}.img
     dd if=/dev/zero of=${img_file} bs=1MiB count=$size status=progress && sync
