@@ -50,6 +50,16 @@ parseargs()
     done
 }
 
+check_and_apply_board_config() {
+if [[ -f $work_dir/config/boards/$BOARD.conf ]];then
+  source $work_dir/config/boards/$BOARD.conf
+  echo "boards configure file check done."
+else
+  echo "boards configure file check failed, please fix."
+  exit 2
+fi
+}
+
 write_uboot() {
     if [[ -f $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ]];then
         bash $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ${loopX}
@@ -119,8 +129,6 @@ make_img(){
 
     umount $rootp
     umount $bootp
-    umount ${rootfs_dir}
-    umount ${boot_dir}
 
     write_uboot
 
@@ -162,5 +170,7 @@ parseargs "$@" || help $?
 if [ ! -d ${log_dir} ];then mkdir -p ${log_dir}; fi
 
 LOG "gen image..."
+BOARD=rock5b
+check_and_apply_board_config
 make_img
 outputd
