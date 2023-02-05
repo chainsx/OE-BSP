@@ -51,8 +51,8 @@ install -m 755 $TargetImage $RPM_BUILD_ROOT/boot/vmlinuz-%{KernelVer}
 install -m 644 .config $RPM_BUILD_ROOT/boot/config-%{KernelVer}
 install -m 644 System.map $RPM_BUILD_ROOT/boot/System.map-%{KernelVer}
 
-mkdir -p $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}
-install -m 644 $(find arch/%{Arch}/boot/dts/PLATFORM/ -name "*.dtb") $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}/
+mkdir -p $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}/PLATFORM
+install -m 644 $(find arch/%{Arch}/boot/dts/PLATFORM/ -name "*.dtb") $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}/PLATFORM/
 
 %postun
 version_old=0
@@ -109,6 +109,8 @@ if [ "$1" == "1" ]; then
 fi
 rm -rf /boot/*.dtb /boot/Image
 install -m 755 /boot/vmlinuz-%{KernelVer} /boot/Image
+mkdir -p /boot/dtb/PLATFORM
+install -m 644 $(find /boot/dtb-%{KernelVer}/PLATFORM/ -name "*.dtb") /boot/dtb/PLATFORM/
 
 %files
 %defattr (-, root, root)
