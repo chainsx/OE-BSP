@@ -60,6 +60,16 @@ write_uboot() {
     fi
 }
 
+set_cmdline(){
+    vmlinuz_name=$(ls $boot_dir | grep vmlinuz)
+    dtb_name=$boot_dir/dtb/$BOOT_DTB_FILE
+    echo "label openEuler
+    kernel /${vmlinuz_name}
+    initrd /initrd.img
+    fdt /${dtb_name}
+    append  root=UUID=${fstab_array[2]} $CMDLINE" > $1
+}
+
 make_img(){
     cd $build_dir
     device=""
@@ -92,6 +102,7 @@ make_img(){
     mount -t ext4 ${rootp} ${root_mnt}
 
     cp -rfp ${boot_dir}/* ${boot_mnt}
+    cp -rfp ${boot_mnt}/dtb* ${boot_mnt}/dtb
     sync
     rm -rf ${boot_dir}/*
 
@@ -99,6 +110,18 @@ make_img(){
     sync
     sleep 10
     LOG "copy openEuler-root done."
+
+    fstab_array=("" "" "" "")
+    for line in `blkid | grep /dev/mapper/${loopX}p`
+    do
+        partuuid=${line#*PARTUUID=\"}
+        fstab_array[${line:$prefix_len:1}]=${partuuid%%\"*}
+    done
+    echo "PARTUUID=${fstab_array[2]}  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
+    echo "PARTUUID=${fstab_array[1]}  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
+
+    mkdir -p ${boot_mnt}/extlinux
+    set_cmdline ${boot_mnt}/extlinux/extlinux.conf
 
     umount $rootp
     umount $bootp

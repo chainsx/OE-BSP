@@ -27,21 +27,6 @@ LOSETUP_D_IMG(){
             umount ${boot_mnt}
         fi
     fi
-    if [ -d ${emmc_boot_mnt} ]; then
-        if grep -q "${emmc_boot_mnt} " /proc/mounts ; then
-            umount ${emmc_boot_mnt}
-        fi
-    fi
-    if [ -d ${rootfs_dir} ]; then
-        if grep -q "${rootfs_dir} " /proc/mounts ; then
-            umount ${rootfs_dir}
-        fi
-    fi
-    if [ -d ${boot_dir} ]; then
-        if grep -q "${boot_dir} " /proc/mounts ; then
-            umount ${boot_dir}
-        fi
-    fi
     if [ "x$device" != "x" ]; then
         kpartx -d ${device}
         losetup -d ${device}
@@ -52,15 +37,6 @@ LOSETUP_D_IMG(){
     fi
     if [ -d ${boot_mnt} ]; then
         rm -rf ${boot_mnt}
-    fi
-    if [ -d ${emmc_boot_mnt} ]; then
-        rm -rf ${emmc_boot_mnt}
-    fi
-    if [ -d ${rootfs_dir} ]; then
-        rm -rf ${rootfs_dir}
-    fi
-    if [ -d ${boot_dir} ]; then
-        rm -rf ${boot_dir}
     fi
     set -e
 }

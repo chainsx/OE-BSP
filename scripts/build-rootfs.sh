@@ -66,6 +66,15 @@ INSTALL_PACKAGES(){
     done
 }
 
+copy_kernel_pkg() {
+    kernel_rpm_file=$(ls $build_dir/rpms | grep *rpm)
+    if [ "x$kernel_rpm_file" == "x" ]; then
+        echo "kernel package make failed, exiting..."
+        exit 2
+    fi
+    cp $build_dir/rpms/* ${rootfs_dir}
+}
+
 build_rootfs() {
     trap 'UMOUNT_ALL' EXIT
     cd $build_dir
@@ -198,20 +207,21 @@ build_rootfs() {
     chmod +x ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
     LOG "Set auto expand rootfs done."
 
+    copy_kernel_pkg
+
     cat << EOF | chroot ${rootfs_dir}  /bin/bash
     echo 'openeuler' | passwd --stdin root
     echo openEuler > /etc/hostname
     ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
     chkconfig --add expand-rootfs.sh
     chkconfig expand-rootfs.sh on
+    rpm -ivh /*.rpm
+    rm /*.rpm
+    dracut --no-kernel /boot/initrd.img
 EOF
 
     #sed -i 's/#NTP=/NTP=0.cn.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
     #sed -i 's/#FallbackNTP=/FallbackNTP=1.asia.pool.ntp.org 2.asia.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
-
-    echo "LABEL=rootfs  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
-    echo "LABEL=boot  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
-    LOG "Set NTP and fstab done."
 
     if [ -d ${rootfs_dir}/boot/grub2 ]; then
         rm -rf ${rootfs_dir}/boot/grub2
