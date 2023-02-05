@@ -127,9 +127,7 @@ make_img(){
 
 outputd(){
     cd $build_dir
-
-    name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
-
+    
     if [ -f $outputdir ];then
         img_name_check=$(ls $outputdir | grep $name)
         if [ "x$img_name_check" != "x" ]; then
@@ -160,6 +158,7 @@ set -e
 outputdir=${build_dir}/$(date +'%Y-%m-%d')
 boot_mnt=${build_dir}/boot_tmp
 root_mnt=${build_dir}/root_tmp
+name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
 
 parseargs "$@" || help $?
 if [ ! -d ${log_dir} ];then mkdir -p ${log_dir}; fi
