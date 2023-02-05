@@ -65,7 +65,11 @@ write_uboot() {
 apply_boot-method() {
     if [[ -f ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh ]];then
         LOG "BOOT_METHOD=${BOOT_METHOD}"
-        bash ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh /dev/mapper/${loopX}p2 ${boot_mnt}
+        bash ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh \
+        /dev/mapper/${loopX}p2 \
+        ${boot_mnt} \
+        ${CMDLINE} \
+        ${BOOT_DTB_FILE}
         echo "apply boot-method done."
     else
         echo "apply boot-method script file check failed, please fix."
