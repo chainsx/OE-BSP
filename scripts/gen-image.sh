@@ -62,12 +62,12 @@ write_uboot() {
 
 set_cmdline(){
     vmlinuz_name=$(ls $boot_dir | grep vmlinuz)
-    dtb_name=$boot_dir/dtb/$BOOT_DTB_FILE
+    echo $CMDLINE
     echo "label openEuler
     kernel /${vmlinuz_name}
     initrd /initrd.img
-    fdt /${dtb_name}
-    append  root=UUID=${uuid} $CMDLINE" > $1
+    fdt /dtb/${BOOT_DTB_FILE}
+    append  root=UUID=${uuid} ${CMDLINE}" > $1
 }
 
 make_img(){
@@ -104,11 +104,11 @@ make_img(){
     cp -rfp ${boot_dir}/* ${boot_mnt}
     cp -rfp ${boot_mnt}/dtb* ${boot_mnt}/dtb
     sync
-    rm -rf ${boot_dir}/*
 
     rsync -avHAXq ${rootfs_dir}/* ${root_mnt}
     sync
-    sleep 10
+    rm -rf ${root_mnt}/boot/*
+    sync
     LOG "copy openEuler-root done."
 
     fstab_array=("" "" "" "")
@@ -117,6 +117,7 @@ make_img(){
         uuid=${line#*UUID=\"}
         uuid=${uuid%%\"*}
     done
+    echo "root UUID ${uuid}"
 
     mkdir -p ${boot_mnt}/extlinux
     set_cmdline ${boot_mnt}/extlinux/extlinux.conf
