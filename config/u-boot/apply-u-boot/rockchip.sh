@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/common.sh
+
 UBOOT_IDB_WRITE_SEEK="64"
 UBOOT_ITB_WRITE_SEEK="16384"
 
