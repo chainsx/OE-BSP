@@ -73,7 +73,7 @@ LOG "BOARD=$BOARD"
 
 check_and_apply_board_config
 
-bash $work_dir/scripts/prepare-uboot.sh -r $BOARD
-bash $work_dir/scripts/make-kernel.sh -r $BOARD
+bash $work_dir/scripts/prepare-uboot.sh -b $BOARD
+bash $work_dir/scripts/make-kernel.sh -b $BOARD
 bash $work_dir/scripts/build-rootfs.sh -r $repo_file -s $spec_param
 bash $work_dir/scripts/gen-image.sh -b $BOARD
