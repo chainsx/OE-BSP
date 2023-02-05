@@ -67,7 +67,7 @@ set_cmdline(){
     kernel /${vmlinuz_name}
     initrd /initrd.img
     fdt /${dtb_name}
-    append  root=UUID=${fstab_array[2]} $CMDLINE" > $1
+    append  root=UUID=${uuid} $CMDLINE" > $1
 }
 
 make_img(){
@@ -112,13 +112,11 @@ make_img(){
     LOG "copy openEuler-root done."
 
     fstab_array=("" "" "" "")
-    for line in `blkid | grep /dev/mapper/${loopX}p`
+    for line in `blkid | grep /dev/mapper/${loopX}p2`
     do
-        partuuid=${line#*PARTUUID=\"}
-        fstab_array[${line:$prefix_len:1}]=${partuuid%%\"*}
+        uuid=${line#*UUID=\"}
+        uuid=${uuid%%\"*}
     done
-    echo "PARTUUID=${fstab_array[2]}  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
-    echo "PARTUUID=${fstab_array[1]}  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
 
     mkdir -p ${boot_mnt}/extlinux
     set_cmdline ${boot_mnt}/extlinux/extlinux.conf

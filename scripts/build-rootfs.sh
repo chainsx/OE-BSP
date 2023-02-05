@@ -66,15 +66,6 @@ INSTALL_PACKAGES(){
     done
 }
 
-copy_kernel_pkg() {
-    kernel_rpm_file=$(ls $build_dir/rpms | grep *rpm)
-    if [ "x$kernel_rpm_file" == "x" ]; then
-        echo "kernel package make failed, exiting..."
-        exit 2
-    fi
-    cp $build_dir/rpms/* ${rootfs_dir}
-}
-
 build_rootfs() {
     trap 'UMOUNT_ALL' EXIT
     cd $build_dir
@@ -207,7 +198,15 @@ build_rootfs() {
     chmod +x ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
     LOG "Set auto expand rootfs done."
 
-    copy_kernel_pkg
+    kernel_rpm_file=$(ls $build_dir/rpms | grep *rpm)
+    if [ "x$kernel_rpm_file" == "x" ]; then
+        echo "kernel package make failed, exiting..."
+        exit 2
+    fi
+    cp $build_dir/rpms/* ${rootfs_dir}
+
+    echo "LABEL=boot  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
+    echo "LABEL=rootfs  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
 
     cat << EOF | chroot ${rootfs_dir}  /bin/bash
     echo 'openeuler' | passwd --stdin root
