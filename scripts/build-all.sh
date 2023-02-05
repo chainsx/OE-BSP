@@ -65,10 +65,19 @@ parseargs()
     done
 }
 
-
 deppkg_install() {
     dnf makecache
     dnf install git wget make gcc bison dtc m4 flex bc kmod openssl-devel tar dosfstools rsync parted dnf-plugins-core tar kpartx diffutils rpm-build python python3 -y
+}
+
+check_and_apply_board_config() {
+if [[ -f $work_dir/config/boards/$BOARD.conf ]];then
+  source $work_dir/config/boards/$BOARD.conf
+  echo "boards configure file check done."
+else
+  echo "boards configure file check failed, please fix."
+  exit 2
+fi
 }
 
 deppkg_install
@@ -80,6 +89,7 @@ LOG "SPEC=$spec_param"
 LOG "name=$name"
 LOG "BOARD=$BOARD"
 
+check_and_apply_board_config
 bash $work_dir/scripts/prepare-uboot.sh $BOARD
 bash $work_dir/scripts/make-kernel.sh $BOARD
 bash $work_dir/scripts/build-rootfs.sh -r $repo_file -s $spec_param
