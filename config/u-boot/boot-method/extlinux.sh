@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./scripts/common.sh
+
 root_dev=$1
 boot_dev=$2
 
