@@ -62,7 +62,7 @@ fi
 
 write_uboot() {
     if [[ -f $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ]];then
-        bash $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh /dev/${loopX}
+        bash $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh $uboot_dir /dev/${loopX}
         echo "write uboot done."
     else
         echo "apply-u-boot script file check failed, please fix."
@@ -173,4 +173,4 @@ LOG "gen image..."
 BOARD=rock5b
 check_and_apply_board_config
 make_img
-outputd
+#outputd
