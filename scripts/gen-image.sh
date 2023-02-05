@@ -7,6 +7,7 @@ The target compressed bootable images will be generated in the build/YYYY-MM-DD 
 
 Options: 
   -n, --name IMAGE_NAME         The Rockchip image name to be built.
+  -b, --board BOARD_NAME        The target board name to be built.
   -h, --help                    Show command help.
 "
 
@@ -41,6 +42,10 @@ parseargs()
             shift
         elif [ "x$1" == "x-n" -o "x$1" == "x--name" ]; then
             name=`echo $2`
+            shift
+            shift
+        elif [ "x$1" == "x-b" -o "x$1" == "x--board" ]; then
+            BOARD=`echo $2`
             shift
             shift
         else
@@ -115,12 +120,11 @@ make_img(){
     uuid=${line#*UUID=\"}
     uuid=${uuid%%\"*}
 
-    echo "root UUID ${uuid}"
+    LOG "root-UUID=${uuid}"
 
     mkdir -p ${boot_mnt}/extlinux
 
-    echo ${CMDLINE}
-    echo ${BOOT_DTB_FILE}
+    LOG "CMDLINE=${CMDLINE}"
     echo "label openEuler
     kernel /Image
     initrd /initrd.img
@@ -170,7 +174,6 @@ parseargs "$@" || help $?
 if [ ! -d ${log_dir} ];then mkdir -p ${log_dir}; fi
 
 LOG "gen image..."
-BOARD=rock5b
 check_and_apply_board_config
 make_img
-#outputd
+outputd
