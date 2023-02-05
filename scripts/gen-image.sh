@@ -101,12 +101,10 @@ make_img(){
     sync
     LOG "copy openEuler-root done."
 
-    fstab_array=("" "" "" "")
-    for line in `blkid | grep /dev/mapper/${loopX}p2`
-    do
-        uuid=${line#*UUID=\"}
-        uuid=${uuid%%\"*}
-    done
+    line=$(blkid | grep /dev/mapper/${loopX}p2)
+    uuid=${line#*UUID=\"}
+    uuid=${uuid%%\"*}
+
     echo "root UUID ${uuid}"
 
     mkdir -p ${boot_mnt}/extlinux
