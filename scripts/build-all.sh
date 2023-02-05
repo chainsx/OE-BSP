@@ -23,7 +23,10 @@ source ./scripts/common.sh
 
 default_param() {
     outputdir=${build_dir}/$(date +'%Y-%m-%d')
+    BOARD=rock5b
     name=openEuler-Rockchip-aarch64-alpha1
+    repo_file="https://gitee.com/src-openeuler/openEuler-repos/raw/openEuler-22.03-LTS-SP1/generic.repo"
+    spec_param=headless
     boot_dir=$rootfs_dir/boot
     uboot_dir=${build_dir}/u-boot
     boot_mnt=${build_dir}/boot_tmp
