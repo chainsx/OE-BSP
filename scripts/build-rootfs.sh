@@ -198,7 +198,7 @@ build_rootfs() {
     chmod +x ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
     LOG "Set auto expand rootfs done."
 
-    kernel_rpm_file=$(ls $build_dir/rpms | grep *rpm)
+    kernel_rpm_file=$(ls $build_dir/rpms | grep rpm)
     if [ "x$kernel_rpm_file" == "x" ]; then
         echo "kernel package make failed, exiting..."
         exit 2
