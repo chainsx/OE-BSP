@@ -51,6 +51,7 @@ install -m 755 $TargetImage $RPM_BUILD_ROOT/boot/vmlinuz-%{KernelVer}
 install -m 644 .config $RPM_BUILD_ROOT/boot/config-%{KernelVer}
 install -m 644 System.map $RPM_BUILD_ROOT/boot/System.map-%{KernelVer}
 
+mkdir -p $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}
 install -m 644 $(find arch/%{Arch}/boot/dts/PLATFORM/ -name "*.dtb") $RPM_BUILD_ROOT/boot/dtb-%{KernelVer}/
 
 %postun
