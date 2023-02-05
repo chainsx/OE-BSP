@@ -190,9 +190,9 @@ build_rootfs() {
     
     LOG "Configure network done."
 
-    #mount --bind /dev ${rootfs_dir}/dev
-    #mount -t proc /proc ${rootfs_dir}/proc
-    #mount -t sysfs /sys ${rootfs_dir}/sys
+    mount --bind /dev ${rootfs_dir}/dev
+    mount -t proc /proc ${rootfs_dir}/proc
+    mount -t sysfs /sys ${rootfs_dir}/sys
 
     cp $work_dir/target/scripts/expand-rootfs.sh ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
     chmod +x ${rootfs_dir}/etc/rc.d/init.d/expand-rootfs.sh
