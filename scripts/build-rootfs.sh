@@ -205,8 +205,8 @@ build_rootfs() {
     fi
     cp $build_dir/rpms/* ${rootfs_dir}
 
-    echo "LABEL=boot  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
-    echo "LABEL=rootfs  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
+    echo "LABEL=rootfs  / ext4    defaults,noatime 0 0" > ${rootfs_dir}/etc/fstab
+    echo "LABEL=boot  /boot vfat    defaults,noatime 0 0" >> ${rootfs_dir}/etc/fstab
 
     cat << EOF | chroot ${rootfs_dir}  /bin/bash
     echo 'openeuler' | passwd --stdin root
