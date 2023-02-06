@@ -52,9 +52,9 @@ fi
 }
 
 write_uboot() {
-    if [[ -f $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh ]];then
+    if [[ -f $work_dir/lib/u-boot/apply-u-boot/$PLATFORM.sh ]];then
         LOG "PLATFORM=${PLATFORM}"
-        bash $work_dir/config/u-boot/apply-u-boot/$PLATFORM.sh $uboot_dir /dev/${loopX}
+        bash $work_dir/lib/u-boot/apply-u-boot/$PLATFORM.sh $uboot_dir /dev/${loopX}
         echo "write uboot done."
     else
         echo "apply-u-boot script file check failed, please fix."
@@ -63,9 +63,9 @@ write_uboot() {
 }
 
 apply_boot-method() {
-    if [[ -f ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh ]];then
+    if [[ -f ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh ]];then
         LOG "BOOT_METHOD=${BOOT_METHOD}"
-        bash ${work_dir}/config/u-boot/boot-method/${BOOT_METHOD}.sh /dev/mapper/${loopX}p2 ${boot_mnt}
+        bash ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh /dev/mapper/${loopX}p2 ${boot_mnt}
         echo "apply boot-method done."
     else
         echo "apply boot-method script file check failed, please fix."
