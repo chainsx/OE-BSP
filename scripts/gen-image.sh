@@ -65,7 +65,11 @@ write_uboot() {
 apply_boot-method() {
     if [[ -f ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh ]];then
         LOG "BOOT_METHOD=${BOOT_METHOD}"
-        bash ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh /dev/mapper/${loopX}p2 ${boot_mnt}
+        bash ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh \
+        /dev/mapper/${loopX}p2 \
+        ${boot_mnt} \
+        ${CMDLINE} \
+        ${BOOT_DTB_FILE}
         echo "apply boot-method done."
     else
         echo "apply boot-method script file check failed, please fix."
@@ -127,9 +131,7 @@ make_img(){
 
 outputd(){
     cd $build_dir
-
-    name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
-
+    
     if [ -f $outputdir ];then
         img_name_check=$(ls $outputdir | grep $name)
         if [ "x$img_name_check" != "x" ]; then
@@ -160,6 +162,7 @@ set -e
 outputdir=${build_dir}/$(date +'%Y-%m-%d')
 boot_mnt=${build_dir}/boot_tmp
 root_mnt=${build_dir}/root_tmp
+name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
 
 parseargs "$@" || help $?
 if [ ! -d ${log_dir} ];then mkdir -p ${log_dir}; fi
