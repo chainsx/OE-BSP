@@ -1,0 +1,11 @@
+#!/bin/bash
+
+build_dir=$1
+
+if [ -d $build_dir/u-boot ];then rm -rf $build_dir/u-boot; fi
+cd $build_dir
+git clone http://github.com/u-boot/u-boot.git --depth=1 -b v2022.04
+cd $build_dir/u-boot
+
+make rpi_4_defconfig
+make -j$(nproc)

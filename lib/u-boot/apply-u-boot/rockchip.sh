@@ -3,7 +3,7 @@
 UBOOT_IDB_WRITE_SEEK="64"
 UBOOT_ITB_WRITE_SEEK="16384"
 
-uboot_dir=$1
+uboot_dir=$1/u-boot
 target=$2
 
 check_u-uboot() {

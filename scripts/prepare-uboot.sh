@@ -52,7 +52,7 @@ if [[ -f $work_dir/config/u-boot/$BOARD.dl ]];then
   echo "prebuilt u-boot configure file check done."
 else
   if [[ -f $work_dir/config/u-boot/$BOARD.build ]];then
-    bash $work_dir/config/u-boot/$BOARD.build  # $BOARD.build will build u-boot and generate idb and itb file at $build_dir/u-boot
+    bash $work_dir/config/u-boot/$BOARD.build $build_dir # $BOARD.build will build u-boot and generate idb and itb file at $build_dir/u-boot
     echo "boards configure file check done."
   fi
   echo "boards configure file check failed, please fix."
