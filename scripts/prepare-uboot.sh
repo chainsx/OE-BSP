@@ -47,11 +47,10 @@ if [ -d $build_dir/u-boot ];then rm -rf $build_dir/u-boot; fi
 if [[ -f $work_dir/config/u-boot/$BOARD.dl ]];then
   bash $work_dir/config/u-boot/$BOARD.dl $build_dir
   echo "prebuilt u-boot configure file check done."
-else
-if [[ -f $work_dir/config/u-boot/$BOARD.build ]];then
+elif [[ -f $work_dir/config/u-boot/$BOARD.build ]];then
   bash $work_dir/config/u-boot/$BOARD.build $build_dir
-  echo "u-boot configure file check done."
-fi
+  echo "u-boot build file check done."
+else
 echo "u-boot configure file check failed, please fix."
 exit 2
 fi
