@@ -54,7 +54,7 @@ fi
 write_uboot() {
     if [[ -f $work_dir/lib/u-boot/apply-u-boot/$PLATFORM.sh ]];then
         LOG "PLATFORM=${PLATFORM}"
-        bash $work_dir/lib/u-boot/apply-u-boot/$PLATFORM.sh $build_dir /dev/${loopX}
+        bash $work_dir/lib/u-boot/apply-u-boot/$PLATFORM.sh $build_dir ${loopX}
         echo "write uboot done."
     else
         echo "apply-u-boot script file check failed, please fix."
