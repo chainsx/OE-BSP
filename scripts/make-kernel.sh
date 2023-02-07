@@ -55,7 +55,8 @@ echo "KERNEL_GIT_SOURCE_BRANCH=$KERNEL_GIT_SOURCE_BRANCH"
 if [[ -f $work_dir/config/kernel/${KERNEL_CONFIG}.config ]];then
   cp $work_dir/config/kernel/${KERNEL_CONFIG}.config $build_dir/kernel/arch/arm64/configs/rpmbuild_defconfig
   cd $build_dir/kernel
-  tar -zcvf $build_dir/${KERNEL_VERSION}.tar.gz .
+  echo "tar kernel source..."
+  tar -zcf $build_dir/${KERNEL_VERSION}.tar.gz .
   cd $build_dir && rm -rf kernel
   echo "kernel configure file check and apply done."
 else
