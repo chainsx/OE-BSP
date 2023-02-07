@@ -79,7 +79,8 @@ cd $build_dir && rm -rf ~/rpmbuild
 }
 
 parseargs "$@" || help $?
-check_and_apply_board_config
+echo "clone kernel for $BOARD"
 clone_kernel_source
+echo "build kernel for $BOARD"
 check_and_apply_kernel_config
 build_kernel
