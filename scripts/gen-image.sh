@@ -163,12 +163,13 @@ set -e
 outputdir=${build_dir}/$(date +'%Y-%m-%d')
 boot_mnt=${build_dir}/boot_tmp
 root_mnt=${build_dir}/root_tmp
-name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
+
 
 parseargs "$@" || help $?
 if [ ! -d ${log_dir} ];then mkdir -p ${log_dir}; fi
 
 LOG "gen image..."
 check_and_apply_board_config
+name=openEuler-${PLATFORM}-${BOARD}-aarch64-alpha
 make_img
 outputd
