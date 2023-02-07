@@ -3,14 +3,7 @@
 build_dir=$1
 target=$2
 
-uboot_dir=$1/u-boot
-
-check_u-uboot() {
-if [ ! -f $uboot_dir/u-boot.bin ];then
-	echo "u-boot.bin not found, exiting..."
-	exit 2
-fi
-}
+uboot_dir=$build_dir/u-boot
 
 download_rpi_firmware() {
 cd $build_dir
@@ -23,6 +16,7 @@ rm -rf $build_dir/rpi-boot/*img
 
 move_uboot_and_write_config() {
 cp ${build_dir}/u-boot/u-boot.bin $build_dir/rpi-boot
+cp ${build_dir}/u-boot/arch/arm/dts/*.dtb $build_dir/rpi-boot
 echo "kernel=u-boot.bin
 kernel_address=0x00080000
 arm_64bit=1
@@ -36,7 +30,6 @@ cp -rfp $build_dir/rpi-boot/* ${build_dir}/tmp_dir
 sync
 }
 
-check_u-uboot
 mkdir ${build_dir}/tmp_dir
 mount /dev/mapper/${target}p1 ${build_dir}/tmp_dir
 download_rpi_firmware
