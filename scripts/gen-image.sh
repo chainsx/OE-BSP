@@ -127,6 +127,7 @@ make_img(){
 
     LOSETUP_D_IMG
     losetup -D
+    kpartx -d ${img_file}
 }
 
 outputd(){
