@@ -28,6 +28,8 @@ enable_gic=1" > "$build_dir/rpi-boot/config.txt"
 apply_uboot() {
 cp -rfp $build_dir/rpi-boot/* ${build_dir}/tmp_dir
 sync
+umount $build_dir/tmp_dir
+rmdir $build_dir/tmp_dir
 }
 
 mkdir ${build_dir}/tmp_dir
