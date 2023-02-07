@@ -38,7 +38,7 @@ sync
 
 check_u-uboot
 mkdir ${build_dir}/tmp_dir
-mount ${target}1 ${build_dir}/tmp_dir
+mount /dev/mapper/${target}p1 ${build_dir}/tmp_dir
 download_rpi_firmware
 move_uboot_and_write_config
 apply_uboot
