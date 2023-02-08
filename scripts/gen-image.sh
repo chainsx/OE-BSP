@@ -73,7 +73,7 @@ extlinux
 echo "apply extlinux boot-method done."
 
 elif [ "x${BOOT_METHOD}" == "xefi" ]; then
-
+echo "apply efi boot-method done."
 else
 echo "unkonwn boot method.."
 exit 2
