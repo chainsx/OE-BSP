@@ -5,6 +5,9 @@ tmp_dir=${build_dir}/tmp
 rootfs_dir=${build_dir}/rootfs
 boot_dir=$rootfs_dir/boot
 uboot_dir=${build_dir}/u-boot
+outputdir=${build_dir}/$(date +'%Y-%m-%d')
+boot_mnt=${build_dir}/boot_tmp
+root_mnt=${build_dir}/root_tmp
 
 buildid=$(date +%Y%m%d%H%M%S)
 builddate=${buildid:0:8}

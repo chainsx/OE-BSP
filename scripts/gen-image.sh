@@ -52,19 +52,33 @@ write_uboot() {
     fi
 }
 
+extlinux(){
+    line=$(blkid | grep $rootp)
+    uuid=${line#*UUID=\"}
+    uuid=${uuid%%\"*}
+    mkdir -p ${boot_mnt}/extlinux
+    echo "label openEuler
+    kernel /Image
+    initrd /initrd.img
+    fdt /dtb/${BOOT_DTB_FILE}
+    append  root=UUID=${uuid} ${CMDLINE}" > ${boot_mnt}/extlinux/extlinux.conf
+}
+
 apply_boot-method() {
-    if [[ -f ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh ]];then
-        LOG "BOOT_METHOD=${BOOT_METHOD}"
-        bash ${work_dir}/lib/u-boot/boot-method/${BOOT_METHOD}.sh \
-        /dev/mapper/${loopX}p2 \
-        ${boot_mnt} \
-        ${CMDLINE} \
-        ${BOOT_DTB_FILE}
-        echo "apply boot-method done."
-    else
-        echo "apply boot-method script file check failed, please fix."
-    exit 2
-    fi
+LOG "BOOT_METHOD=${BOOT_METHOD}"
+if [ "x${BOOT_METHOD}" == "xextlinux" ]; then
+echo "CMDLINE=${CMDLINE}"
+echo "BOOT_DTB_FILE=${BOOT_DTB_FILE}"
+extlinux
+echo "apply extlinux boot-method done."
+
+elif [ "x${BOOT_METHOD}" == "xefi" ]; then
+
+else
+echo "unkonwn boot method.."
+exit 2
+
+fi
 }
 
 make_img(){
