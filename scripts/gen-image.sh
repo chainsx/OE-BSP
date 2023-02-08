@@ -41,16 +41,6 @@ parseargs()
     done
 }
 
-check_and_apply_board_config() {
-if [[ -f $work_dir/config/boards/$BOARD.conf ]];then
-  source $work_dir/config/boards/$BOARD.conf
-  echo "boards configure file check done."
-else
-  echo "boards configure file check failed, please fix."
-  exit 2
-fi
-}
-
 write_uboot() {
     if [[ -f $work_dir/lib/u-boot/apply-u-boot/$PLATFORM.sh ]];then
         LOG "PLATFORM=${PLATFORM}"
