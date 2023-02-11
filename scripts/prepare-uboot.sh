@@ -50,6 +50,9 @@ if [[ -f $work_dir/config/u-boot/$BOARD.dl ]];then
 elif [[ -f $work_dir/config/u-boot/$BOARD.build ]];then
   bash $work_dir/config/u-boot/$BOARD.build $build_dir
   echo "u-boot build file check done."
+elif [[ -f $work_dir/config/u-boot/$BOARD.local ]];then
+  bash $work_dir/config/u-boot/$BOARD.local $build_dir
+  echo "u-boot build file check done."
 else
 echo "u-boot configure file check failed, please fix."
 exit 2
