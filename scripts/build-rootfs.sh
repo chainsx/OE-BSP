@@ -222,12 +222,8 @@ EOF
     #sed -i 's/#NTP=/NTP=0.cn.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
     #sed -i 's/#FallbackNTP=/FallbackNTP=1.asia.pool.ntp.org 2.asia.pool.ntp.org/g' ${rootfs_dir}/etc/systemd/timesyncd.conf
 
-    if [ -d ${rootfs_dir}/boot/grub2 ]; then
-        rm -rf ${rootfs_dir}/boot/grub2
-    fi
-
-    if [ -d ${rootfs_dir}/boot/efi ]; then
-        rm -rf ${rootfs_dir}/boot/efi
+    if [ -d ${tmp_dir} ]; then
+        rm -rf ${tmp_dir}
     fi
 
     UMOUNT_ALL
