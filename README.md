@@ -1,4 +1,4 @@
-# OE-BSP
-openEuler use BSP kernel.
+# openOE
+openEuler use other kernel.
 
 ## Under development, please do not use
