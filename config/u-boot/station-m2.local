@@ -1,0 +1,8 @@
+#!/bin/bash
+
+build_dir=$1
+UBOOT_IDB_DL_PATH=$build_dir/../target/binary/u-boot/station-m2/idbloader.img
+UBOOT_ITB_DL_PATH=$build_dir/../target/binary/u-boot/station-m2/u-boot.itb
+
+cp $UBOOT_IDB_DL_PATH $build_dir/u-boot/idbloader.img
+cp $UBOOT_ITB_DL_PATH $build_dir/u-boot/u-boot.itb
